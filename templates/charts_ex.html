@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+<script>
+{% block jquery %}
+var endpoint = '/api/chart/data/'
+var stud1time = []
+var stud2time = []
+var stud1hr = []
+var stud2hr = []
+var labels2 = ''
+var labels1 = '';
+
+$.ajax({
+    method: "GET",
+    url: endpoint,
+    success: function(data){
+        
+        labels1 = data.labels[0]
+        labels2 = data.labels[1]
+        stud1time = Object.keys(data[labels1])
+        stud1hr = Object.values(data[labels1]).map(n => n.toString())
+        stud2time = Object.keys(data[labels2])
+        stud2hr = Object.values(data[labels2]).map(n => n.toString())
+        setChart()
+        //console.log()
+    },
+    error: function(error_data){
+        console.log("error")
+        console.log(error_data)
+    }
+})
+
+function setChart(){
+    var ctx = document.getElementById("myChart");
+    var ctx2 = document.getElementById("myChart2");
+    var tf =  'YYYY-MMM-D h:mm a';
+    var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: stud1time,
+        datasets: [{
+            label: labels1,
+            yAxisID: labels1,
+            data: stud1hr,
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+            id: labels1,
+            type: 'linear',
+            }]
+        }
+    }
+
+});
+    var myChart = new Chart(ctx2, {
+    type: 'line',
+    data: {
+        labels: stud2time,
+        datasets: [{
+            label: labels2,
+            yAxisID: labels2,
+            data: stud2hr,
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+            id: labels2,
+            type: 'linear',
+            }]
+        }
+    }
+});
+}
+// var ctx = document.getElementById("myChart");
+
+
+
+{% endblock %}
+</script>
+
+{% block content %}
+
+<div class='row'>
+    <div class='col-sm-12' url-endpoint='{% url "api-data" %}'>
+        <div class='col-sm-6'>
+            <canvas id="myChart" width="400" height="400"></canvas>
+        </div>
+        <div class='col-sm-6'>
+            <canvas id="myChart2" width="400" height="400"></canvas>
+        </div>
+
+
+    </div>
+</div>
+
+{% endblock content %}

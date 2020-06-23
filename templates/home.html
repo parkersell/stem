@@ -1,0 +1,18 @@
+{%extends 'base.html' %}
+
+{%block title %}IV Sight Homepage{% endblock %}
+
+{%block breadcrumb %}
+<li class="breadcrumb-item">Homepage</li>
+{%endblock%}
+
+{%block content%}
+  <h1><a href="{% url 'recent' %}">Recent Data</a></h1>
+    <p>Click here to be directed to the dashboard describing the most recently synced data</p>
+  <h1><a href="{% url 'day' %}">Today's Data</a></h1>
+    <p>Click here to be directed to the dashboard describing the entire day's data</p>
+  <h1><a href="{% url 'hrchart' %}">Chart</a></h1>
+    <p>Click here to be directed a chart</p>
+    
+{%endblock%}
+

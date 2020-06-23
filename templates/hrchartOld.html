@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% block title %}Heart Rate Chart{%endblock%}
+
+{%block content %}
+  <canvas id="hrChart" data-url = "{% url 'datahrchart' %}" ></canvas>
+
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+
+  <script>   
+    $(function () {
+
+      var $hrchart = $("#datahrchart");
+      $.ajax({
+        url: $hrchart.data("url"),
+        success: function (data) {
+          alert(data)
+          /*
+          var ctx = $hrchart[0].getContext('2d');
+          
+          var config ={
+
+            type: 'line',
+            data: {
+              labels: data.labels[0], 
+              datasets: [{
+                label: data.labels[0],
+                data: {
+                  data
+                },
+              } 
+            },
+          };
+
+          new Chart(ctx, config);
+          */
+        }
+        
+      });
+    });
+
+    /*
+    var config = {
+      type: 'line',
+      data: {
+        labels: 'Parker', 
+        datasets: [{
+          label: 'Parker',
+          data: {
+            {{Parker}}
+          }
+          
+          
+          [ 
+            {% for key, value in Parker.items %}
+              {
+                x = 1,
+                y = 2
+              },
+            {% endfor %}
+          ],
+        }
+        ,{
+          label: 'Andrew',
+          data: [
+            {% for key, value in Andrew.items %}
+              {
+                x = 1, 
+                y = 2
+              },
+            {% endfor %}
+          ],
+        }
+        ]
+        }
+        
+                  options: {
+                    responsive: true,
+                    title: {
+                      display: true,
+                      text: 'Chart.js Time Point Data'
+                    },
+                    scales: {
+                      xAxes: [{
+                        type: 'time',
+                        display: true,
+                        scaleLabel: {
+                          display: true,
+                          labelString: 'Date'
+                        },
+                        ticks: {
+                          major: {
+                            fontStyle: 'bold',
+                            fontColor: '#FF0000'
+                          }
+                        }
+                      }],
+                      yAxes: [{
+                        display: true,
+                        scaleLabel: {
+                          display: true,
+                          labelString: 'value'
+                        }
+                      }]
+                    }
+
+                }]
+      };
+    
+    
+    window.onload = function() {
+      var ctx = document.getElementById('hrChart').getContext('2d');
+      window.myLine = new Chart(ctx, config);
+    };
+    */
+  </script>
+
+
+{%endblock%}

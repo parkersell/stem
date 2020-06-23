@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{%block title %}Recent Data{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">Homepage</a></li>
+  <li class="breadcrumb-item active">Recent Data Report</li>
+{% endblock %}
+
+{% block content %}
+  <table class="table">
+    <thead class="thead-inverse">
+      <tr>
+        <th>Student Name</th>
+        <th>Average Heart Rate</th>
+        <th>Recent Sync Time</th>
+        <th>Number of Times Recently Stressed</th>
+        <th>Most Recent Stressed Time</th>
+        <th>Stress and Step Correlation</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for stud in recent %}
+        <tr>
+          <td>{{stud.student_name}}</td>
+          <td>{{stud.avg_hr}}</td>
+          <td>{{stud.rec_sync}}</td>
+          <td>{{stud.times_str_red}}</td>
+          <td>{{stud.time_rec_str_red}}</td>
+          <td>{{stud.str_step_cor}}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
