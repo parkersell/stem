@@ -15,7 +15,7 @@ $.ajax({
     url: endpoint,
     success: function(data){
         
-        labels1 = data.labels[0]
+        labels1 = data.labels[3]
         labels2 = data.labels[1]
         stud1time = Object.keys(data[labels1])
         stud1hr = Object.values(data[labels1]).map(n => n.toString())
@@ -55,7 +55,7 @@ function setChart(){
     }
 
 });
-    var myChart = new Chart(ctx2, {
+    /* var myChart = new Chart(ctx2, {
     type: 'line',
     data: {
         labels: stud2time,
@@ -74,11 +74,8 @@ function setChart(){
             }]
         }
     }
-});
+}); */
 }
-// var ctx = document.getElementById("myChart");
-
-
 
 {% endblock %}
 </script>
@@ -88,13 +85,11 @@ function setChart(){
 <div class='row'>
     <div class='col-sm-12' url-endpoint='{% url "api-data" %}'>
         <div class='col-sm-6'>
-            <canvas id="myChart" width="400" height="400"></canvas>
+            <canvas id="myChart" width="800" height="800"></canvas>
         </div>
-        <div class='col-sm-6'>
+        <!-- <div class='col-sm-6'>
             <canvas id="myChart2" width="400" height="400"></canvas>
-        </div>
-
-
+        </div> -->
     </div>
 </div>
 

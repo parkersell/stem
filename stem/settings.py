@@ -27,8 +27,9 @@ SECRET_KEY = '@rv$xpc^s-obx6y6@7tw2*6dv8j($sn+3@cke=7$5#=m=)c@p='
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['threedp12.pythonanywhere.com']
 
+# ALLOWED_HOSTS = ['threedp12.pythonanywhere.com'] # use this for the online webserver 
+ALLOWED_HOSTS = []
 
 # Application definition
 
@@ -41,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'datavis',
+    
 ]
 
 MIDDLEWARE = [
@@ -131,3 +133,4 @@ STATICFILES_DIRS = [
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+

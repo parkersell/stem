@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.conf.urls import url
 from django.urls import path
-from datavis.views import DataView, HomeView, get_data, ChartData
+from datavis.views import DataView, HomeView, ChartData
 from datavis import views
 
 urlpatterns = [
@@ -26,8 +26,10 @@ urlpatterns = [
     url(r'^day/$', views.day, name ='day'),
     url(r'upload/$', DataView.as_view(), name="data_upload"),
     url(r'^chart', HomeView.as_view(), name='hrchart'),
-    url(r'^api/data/$', get_data, name='api-data'),
-    url(r'^api/chart/data/$', ChartData.as_view()),
+    # url(r'^api/data/$', get_data, name='api-data'),
+    url(r'^api/chart/data/$', ChartData.as_view(), name='api-data'),
     #path('datahr', views.datahr, name='datahrchart'),
+    url(r'^sync/$', views.syncdata, name ='syncdata')
+
 
 ]

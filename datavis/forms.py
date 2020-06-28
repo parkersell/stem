@@ -16,8 +16,7 @@ class DataUpload(forms.Form):
         reader = csv.DictReader(f)
 
         for hr in reader:
-            Chart.objects.create(student_name=Student.objects.get(student_name="Parker"),
+            Chart.objects.create(student_name=Student.objects.get(student_name="Caiden"),
                                  time=convert_date(hr["Time"]),
-                                 min_hr=hr["Value"],
-                                 min_steps=0
+                                 min_hr=hr["Value"]
                                  )
