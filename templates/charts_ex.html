@@ -47,9 +47,20 @@ function setChart(){
     },
     options: {
         scales: {
+            xAxes: [{
+                type: 'time',
+                time: {
+                    unit: 'minute',
+                    
+                },
+                ticks: {
+                    autoSkip: true,
+                    maxTicksLimit: 20
+                }
+            }],
             yAxes: [{
-            id: labels1,
-            type: 'linear',
+                id: labels1,
+                type: 'linear',
             }]
         }
     }
@@ -68,9 +79,15 @@ function setChart(){
     },
     options: {
         scales: {
+            xAxes: [{
+                type: 'time',
+                time: {
+                    unit: 'minute'
+                }
+            }],
             yAxes: [{
-            id: labels2,
-            type: 'linear',
+                id: labels2,
+                type: 'linear',
             }]
         }
     }
@@ -84,12 +101,12 @@ function setChart(){
 
 <div class='row'>
     <div class='col-sm-12' url-endpoint='{% url "api-data" %}'>
+        
+            <canvas id="myChart" width="400" height="200"></canvas>
+        
         <div class='col-sm-6'>
-            <canvas id="myChart" width="800" height="800"></canvas>
-        </div>
-        <!-- <div class='col-sm-6'>
             <canvas id="myChart2" width="400" height="400"></canvas>
-        </div> -->
+        </div>
     </div>
 </div>
 
