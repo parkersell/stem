@@ -1,36 +1,3 @@
-{% extends 'base.html' %}
-
-<script>
-{% block jquery %}
-var endpoint = '/api/chart/data/'
-var stud1time = []
-var stud2time = []
-var stud1hr = []
-var stud2hr = []
-var labels2 = ''
-var labels1 = '';
-
-
-$.ajax({
-    method: "GET",
-    url: endpoint,
-    success: function(data){
-        var studentNum = {{ student }}
-        labels1 = data.labels[studentNum]
-        labels2 = data.labels[1]
-        stud1time = Object.keys(data[labels1])
-        stud1hr = Object.values(data[labels1]).map(n => n.toString())
-        stud2time = Object.keys(data[labels2])
-        stud2hr = Object.values(data[labels2]).map(n => n.toString())
-        setChart()
-        //console.log()
-    },
-    error: function(error_data){
-        console.log("error")
-        console.log(error_data)
-    }
-})
-
 function setChart(){
     var ctx = document.getElementById("myChart");
     var ctx2 = document.getElementById("myChart2");
@@ -97,21 +64,3 @@ function setChart(){
     }
 }); */
 }
-
-{% endblock %}
-</script>
-
-{% block content %}
-
-<div class='row'>
-    <div class='col-sm-12' url-endpoint='{% url "api-data" %}'>
-        
-            <canvas id="myChart" width="400" height="200"></canvas>
-        
-        <div class='col-sm-6'>
-            <canvas id="myChart2" width="400" height="400"></canvas>
-        </div>
-    </div>
-</div>
-
-{% endblock content %}

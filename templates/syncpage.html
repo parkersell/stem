@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{%block breadcrumb %}
+<li class="breadcrumb-item">SyncDataPage</li>
+{%endblock%}
+
+{% block content %}
+    <select>
+        <option disabled="true" selected>-- Select Student --</option>
+        {% for stud in students %}
+        {% endfor %}
+      <option></option>
+    </select>
+{% endblock %}
