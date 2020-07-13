@@ -117,6 +117,20 @@ class Syncing(models.Model):
                 Chart.objects.get(student_name=studentobject,time=convert_date(time_list[i], day))
             except Chart.DoesNotExist: #if it pulls DNE then create it
                 Chart.objects.create(student_name=studentobject,time=convert_date(time_list[i], day),min_hr=hr_list[i])
+        for i in range(len(time2_list)):
+            try:
+                c = Chart.objects.get(student_name=studentobject, time=convert_date(time2_list[i], day))
+                c.min_steps = step_list[i]
+                c.save()
+            except Chart.DoesNotExist:
+                pass
+        
+
+            
+
+        
+        
+            
 
 
 
