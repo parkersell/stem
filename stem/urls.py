@@ -14,23 +14,24 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.conf.urls import url
 from django.urls import path
-from datavis.views import DataView, ChartView, ChartData, SyncView
-from datavis import views
+from datavis.views import DataView, ChartView, ChartData
+from datavis import views as dv
+from analysis import views as av
 
 urlpatterns = [
-    url(r'^$', views.home, name='home'),
-    url(r'^recent/$', views.recent, name='recent'),
-    url('admin/', admin.site.urls),
-    url(r'^day/$', views.day, name ='day'),
-    url(r'upload/$', DataView.as_view(), name="data_upload"),
-    url(r'^chart', ChartView.as_view(), name='hrchart'),
-    # url(r'^api/data/$', get_data, name='api-data'),
-    url(r'^api/chart/data/$', ChartData.as_view(), name='api-data'),
+    path('', dv.home, name='home'),
+    path('recent/', av.recent, name='recent'),
+    path('admin/', admin.site.urls),
+    path('day/', av.day, name ='day'),
+    path('upload/', DataView.as_view(), name="data_upload"),
+    path('chartselect/', dv.chartselect, name='chartselect'),
+    path('chart/<str:name>/', ChartView.as_view(), name='hrchart'),
+    # path(r'^api/data/$', get_data, name='api-data'),
+    path('api/chart/data/', ChartData.as_view(), name='api-data'),
     #path('datahr', views.datahr, name='datahrchart'),
-    url(r'^sync/$', views.SyncView.as_view(), name ='syncpage'),
-    url(r'^sync/success$', views.syncsuccess, name ='syncsuccess')
+    path('sync/', dv.syncpage, name ='syncpage'),
+    path('sync/success', dv.syncsuccess, name ='syncsuccess')
 
 
 ]

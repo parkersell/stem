@@ -8,10 +8,6 @@ import datetime
 import json
 import pytz
 
-class DataFile(models.Model):
-    file = models.FileField(upload_to="student/%Y/%m/%d")
-
-
 class Student(models.Model):
     student_name = models.CharField(max_length=30, unique=True)
 
@@ -38,7 +34,7 @@ class Chart(models.Model):
         time = []
         min_hr =[]
         for date in timetemp:
-            time.append(date.strftime('%#m/%#d/%Y, %#I:%M %p'))# this could get bad since %#I only works on Windows not Linux
+            time.append(date.strftime('%#m/%#d/%Y, %#I:%M %p'))# this could get bad since %#I only works on Windows not Linux, MIGHT TRY TO DO IN CHART INSTEAD
         for hr in min_hrtemp:
             min_hr.append(hr)
         time.reverse()
@@ -67,21 +63,11 @@ class Chart(models.Model):
         return temp
         
 
-        
-
-
-
-class Notes(models.Model):
-    teacher_name = models.CharField(max_length=30)
-    student_name = models.ForeignKey(Student, max_length=30, related_name= 'notes', on_delete=models.CASCADE)
-    time_created = models.DateTimeField(auto_now_add=True)
-    time_referred = models.DateTimeField()
-    note = models.TextField(max_length=4000)
-
 
 class Syncing(models.Model):
-    student_name = models.ForeignKey(Student, max_length=30, related_name= 'recent', on_delete=models.CASCADE)
+    student_name = models.ForeignKey(Student, max_length=30, related_name= 'syncing', on_delete=models.CASCADE)
     recent_synctime = models.DateTimeField()
+    sync_date = models.CharField(max_length=30)#Choices are today, yesterday, or %Y-%m-%d
 
     def __str__(self):
         return str(self.recent_synctime)
@@ -122,7 +108,9 @@ class Syncing(models.Model):
         for i in fit_statsStep['activities-steps-intraday']['dataset']:
             step_list.append(i['value'])
             time2_list.append(i['time'])
-        Syncing.objects.create(student_name=studentobject,recent_synctime=convert_date(time_list[-1], day))
+        #t= time_list[-1]
+        # TODO make sure that there is things in timelist before creating object, since if not wearing watch then no time_list
+        Syncing.objects.create(student_name=studentobject,recent_synctime=convert_date(time_list[-1], day), sync_date=day)
 
         for i in range(len(time_list)): 
             try: #check to see if it already exists
@@ -130,12 +118,6 @@ class Syncing(models.Model):
             except Chart.DoesNotExist: #if it pulls DNE then create it
                 Chart.objects.create(student_name=studentobject,time=convert_date(time_list[i], day),min_hr=hr_list[i])
 
-
-class Day(models.Model):
-    student_name = models.ForeignKey(Student, max_length=30, related_name= 'day', on_delete=models.CASCADE)
-    peak_hr = models.IntegerField()
-    day_str_red = models.IntegerField()
-    str_step_cor = models.IntegerField()
 
 
 

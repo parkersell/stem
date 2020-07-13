@@ -1,0 +1,114 @@
+//<script> //to trick visual studio to giving me better formatting
+
+function singleChart(time, label, hr){
+    var ctx = document.getElementById("myChart");
+    //var ctx2 = document.getElementById("myChart2");
+    var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: time,
+        datasets: [{
+            label: label,
+            yAxisID: label,
+            data: hr,
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            xAxes: [{
+                type: 'time',
+                time: {
+                    unit: 'minute',
+                    
+                },
+                ticks: {
+                    autoSkip: true,
+                    maxTicksLimit: 20
+                }
+            }],
+            yAxes: [{
+                id: label,
+                type: 'linear',
+                ticks: {
+                    suggestedMin: 50,
+                    suggestedMax: 80
+                }
+            }]
+        }
+    }
+
+});
+    /* var myChart = new Chart(ctx2, {
+    type: 'line',
+    data: {
+        labels: stud2time,
+        datasets: [{
+            label: labels2,
+            yAxisID: labels2,
+            data: stud2hr,
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            xAxes: [{
+                type: 'time',
+                time: {
+                    unit: 'minute'
+                }
+            }],
+            yAxes: [{
+                id: labels2,
+                type: 'linear',
+            }]
+        }
+    }
+}); */
+}
+
+function multiChart(basetime, time1, label1, hr1, time2, label2, hr2){
+    var ctx = document.getElementById("myChart").getContext('2d');
+    //var ctx2 = document.getElementById("myChart2");
+    var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: basetime,
+        datasets: [{
+            label: label1,
+            yAxisID: label1,
+            data: hr1,
+            borderWidth: 1
+        }, {
+            label: label2,
+            yAxisID: label2,
+            data: hr2,
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            xAxes: [{
+                type: 'time',
+                time: {
+                    unit: 'minute',
+                    
+                },
+                ticks: {
+                    autoSkip: true,
+                    maxTicksLimit: 20
+                }
+            }],
+            yAxes: [{
+                id: labels1,
+                type: 'linear',
+                ticks: {
+                    suggestedMin: 50,
+                    suggestedMax: 80
+                }
+            }]
+        }
+    }
+
+});
+}

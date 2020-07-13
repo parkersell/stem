@@ -1,5 +1,5 @@
 from django import forms
-from .models import Chart, Student
+from .models import Chart, Student, Syncing
 import io, csv
 from datetime import datetime
 
@@ -21,7 +21,31 @@ class DataUpload(forms.Form):
                                  )
 
 class SyncUpload(forms.Form):
-    
-    # student= forms.CharField(label='Which student would you like to sync data for?', widget=forms.Select(choices=LIST))
-    def syncstudent(self, day):
-        Chart.syncFitbitData(day, student)
+    str_student= forms.CharField(
+        label='Student', 
+        help_text='Which student would you like to sync data for?',
+        widget=forms.Textarea(
+            attrs={'rows': 1}
+        ), 
+        max_length=30
+    )
+    sync_date = forms.CharField(
+        help_text='Choices are today, yesterday, or %Y-%m-%d', 
+        widget=forms.Textarea(
+           attrs={'rows': 1, 'cols': 10} 
+        ),
+        max_length=30
+    )
+    class Meta:
+        model =Syncing
+        fields =['student_name', 'recent_synctime','str_student', 'sync_date']
+
+class ChartSelect(forms.Form):
+    str_student= forms.CharField(
+        label='Student', 
+        help_text='Which student would you like to see data for?',
+        widget=forms.Textarea(
+            attrs={'rows': 1, 'cols': 10}
+        ), 
+        max_length=30
+    )

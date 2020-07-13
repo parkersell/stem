@@ -17,12 +17,13 @@ $.ajax({
     success: function(data){
         var studentNum = {{ student }}
         labels1 = data.labels[studentNum]
-        labels2 = data.labels[1]
+        labels2 = data.labels[3]
         stud1time = Object.keys(data[labels1])
         stud1hr = Object.values(data[labels1]).map(n => n.toString())
         stud2time = Object.keys(data[labels2])
         stud2hr = Object.values(data[labels2]).map(n => n.toString())
-        setChart()
+        singleChart(stud1time, labels1, stud1hr)  
+        //multiChart(stud1time, stud1time, labels1, stud1hr, stud1time, labels1, stud1hr)
         //console.log()
     },
     error: function(error_data){
@@ -30,74 +31,7 @@ $.ajax({
         console.log(error_data)
     }
 })
-
-function setChart(){
-    var ctx = document.getElementById("myChart");
-    var ctx2 = document.getElementById("myChart2");
-    var tf =  'YYYY-MMM-D h:mm a';
-    var myChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-        labels: stud1time,
-        datasets: [{
-            label: labels1,
-            yAxisID: labels1,
-            data: stud1hr,
-            borderWidth: 1
-        }]
-    },
-    options: {
-        scales: {
-            xAxes: [{
-                type: 'time',
-                time: {
-                    unit: 'minute',
-                    
-                },
-                ticks: {
-                    autoSkip: true,
-                    maxTicksLimit: 20
-                }
-            }],
-            yAxes: [{
-                id: labels1,
-                type: 'linear',
-                ticks: {
-                    suggestedMin: 50
-                }
-            }]
-        }
-    }
-
-});
-    /* var myChart = new Chart(ctx2, {
-    type: 'line',
-    data: {
-        labels: stud2time,
-        datasets: [{
-            label: labels2,
-            yAxisID: labels2,
-            data: stud2hr,
-            borderWidth: 1
-        }]
-    },
-    options: {
-        scales: {
-            xAxes: [{
-                type: 'time',
-                time: {
-                    unit: 'minute'
-                }
-            }],
-            yAxes: [{
-                id: labels2,
-                type: 'linear',
-            }]
-        }
-    }
-}); */
-}
-
+{% include 'base/chart_functions.html' %}
 {% endblock %}
 </script>
 
@@ -107,10 +41,10 @@ function setChart(){
     <div class='col-sm-12' url-endpoint='{% url "api-data" %}'>
         
             <canvas id="myChart" width="400" height="200"></canvas>
-        
+        <!-- 
         <div class='col-sm-6'>
             <canvas id="myChart2" width="400" height="400"></canvas>
-        </div>
+        </div> -->
     </div>
 </div>
 
