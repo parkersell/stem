@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 
+
 <script>
 {% block jquery %}
 var endpoint = '/api/chart/data/'
@@ -37,6 +38,12 @@ $.ajax({
 
 {% block content %}
 
+<form method="post" novalidate>
+    {% csrf_token %}
+    {% include 'base/form.html' %}
+    <button type="submit" class="btn btn-success">Post</button>
+</form>
+
 <div class='row'>
     <div class='col-sm-12' url-endpoint='{% url "api-data" %}'>
         
@@ -47,5 +54,7 @@ $.ajax({
         </div> -->
     </div>
 </div>
+
+
 
 {% endblock content %}

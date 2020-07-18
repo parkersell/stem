@@ -6,7 +6,7 @@ from django.contrib import messages
 from .models import Syncing, Chart, Student
 from django.views.generic.edit import FormView, View
 from .forms import DataUpload, SyncUpload, ChartSelect
-from django.http import JsonResponse, Http404   
+from django.http import JsonResponse, Http404, HttpResponseRedirect   
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -19,15 +19,27 @@ import datetime
 print("http://localhost:8000/sync")
 
 class ChartView(View):
-    
+    form_class = ChartSelect
+    initial ={"str_student": "Parker"}#learn to skip chartselect and just use a default that was saved
+
     def get(self, request, *args, **kwargs):
         name = self.kwargs['name'] 
-        try:
-            student = Student.objects.get(student_name=name)
-            pk_list = student.pk-1 #because in the json the first number is 0 not 1(like it is for pk)
-        except Student.DoesNotExist:
-            raise Http404("Student does not exist") 
-        return render(request, 'charts_ex.html', {"student": pk_list})
+        form = self.form_class() #initial=self.initial)
+        student = Student.objects.get(student_name=name)
+        pk_list = student.pk-1 #because in the json the first number is 0 not 1(like it is for pk)
+        return render(request, 'charts_ex.html', {"form": form, "student": pk_list})
+    
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            student = form.cleaned_data.get('str_student')
+            try:
+                student = Student.objects.get(student_name=student)
+            except Student.DoesNotExist:
+                raise Http404("Student does not exist") 
+            #initial = {"str_student":student} #how to store this?
+            return redirect('hrchart', name=student)
+        return redirect('chartselect')
 
 class ChartData(APIView):
     authentication_classes = []
@@ -69,6 +81,6 @@ def chartselect(request):
             student = form.cleaned_data.get('str_student')
             return redirect('hrchart', name=student) 
     else:
-        form = ChartSelect()
+        form = ChartSelect(initial={"str_student": "Parker"} )
     return render(request, 'chartselect.html', {'form': form})
 

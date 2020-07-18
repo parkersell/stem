@@ -125,13 +125,3 @@ class Syncing(models.Model):
             except Chart.DoesNotExist:
                 pass
         
-
-            
-
-        
-        
-            
-
-
-
-
