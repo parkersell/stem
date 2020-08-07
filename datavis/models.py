@@ -14,6 +14,15 @@ class Student(models.Model):
     def __str__(self):
         return self.student_name
 
+    @staticmethod
+    def returnObject(str):
+        try:
+            stud = Student.objects.get(student_name=str)
+        except Chart.DoesNotExist:
+            stud = 'DNE'
+        return stud
+
+
 
 class Chart(models.Model):
     student_name = models.ForeignKey(Student, max_length=30, related_name= 'chart', on_delete=models.CASCADE)
@@ -28,16 +37,17 @@ class Chart(models.Model):
         studentobject = Student.objects.get(student_name=student)
         timetemp = Chart.objects.filter(student_name=studentobject).values_list('time', flat=True).order_by('-time')
         min_hrtemp = Chart.objects.filter(student_name=studentobject).values_list('min_hr', flat=True).order_by('-time')
+   
         if (str(periodoftime)== "hour"):
-            timetemp = timetemp[:60]
-            min_hrtemp = min_hrtemp[:60] 
+           timetemp = timetemp[:60]
+           min_hrtemp = min_hrtemp[:60] 
         time = []
         min_hr =[]
         for date in timetemp:
             time.append(date.strftime('%#m/%#d/%Y, %#I:%M %p'))# this could get bad since %#I only works on Windows not Linux, MIGHT TRY TO DO IN CHART INSTEAD
         for hr in min_hrtemp:
             min_hr.append(hr)
-        time.reverse()
+        time.reverse() 
         min_hr.reverse()
         zipObj = zip(time, min_hr)
         return dict(zipObj)
@@ -46,7 +56,7 @@ class Chart(models.Model):
     def getallstudents(periodoftime):
         data ={} #held to hold the dictionary on line 41
         labels =[]
-
+        
         students = Student.objects.all() # should adjust to all with data
         numberofstudents = len(students)
         for student in students:
@@ -61,7 +71,20 @@ class Chart(models.Model):
             specificstudentdata = data[str(labels[i])]
             temp.update({name: specificstudentdata})
         return temp
+
+    @staticmethod
+    def returnTime(str, studentobj):
+        try:
+            time = datetime.datetime.strptime(str,'%Y/%m/%d %H:%M')# this could get bad since %#I only works on Windows not Linux
+            if studentobj == 'none': #allows for filtering time by student
+                time = Chart.objects.get(time=time)
+            else:
+                time = Chart.objects.filter(student_name=studentobj).get(time=time)
+        except Chart.DoesNotExist:
+            time = 'DNE'
+        return time
         
+    #TODO create an overloaded function or a second function that queries using a time range since the query used above is too specific to taking the most recent 60 points
 
 
 class Syncing(models.Model):
@@ -124,4 +147,4 @@ class Syncing(models.Model):
                 c.save()
             except Chart.DoesNotExist:
                 pass
-        
+

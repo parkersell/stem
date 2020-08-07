@@ -39,9 +39,11 @@
     {% include 'base/js.html' %}
     
     <script>
+      {% block javascript %}{% endblock %}
       $(document).ready(function(){
         {% block jquery %}{% endblock %}
       })
+      
       </script>
     {%endblock body%}
   </body>

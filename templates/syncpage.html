@@ -6,9 +6,19 @@
 {%endblock%}
 
 {% block content %}
-<form method="post" novalidate>
+<form method="post" novalidate autocomplete="off">
   {% csrf_token %}
   {% include 'base/form.html' %}
   <button type="submit" class="btn btn-success">Post</button>
 </form>
+
+{% endblock %}
+{% block javascript %}
+//<script>
+$("#id_sync_date").datetimepicker({
+  timepicker: false, 
+  datepicker: true,
+  format: 'Y-m-d'
+});
+
 {% endblock %}

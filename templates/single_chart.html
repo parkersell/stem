@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+
+<script>
+{% block jquery %}
+var endpoint = '/api/chart/data/'
+var stud1time = []
+var stud1hr = []
+var labels1 = '';
+
+
+$.ajax({
+    method: "GET",
+    url: endpoint,
+    success: function(data){
+        var studentNum = {{ student }}
+        labels1 = data.labels[studentNum]
+        stud1time = Object.keys(data[labels1])
+        stud1hr = Object.values(data[labels1]).map(n => n.toString())
+        singleChart(stud1time, labels1, stud1hr)   
+    },
+    error: function(error_data){
+        console.log("error")
+        console.log(error_data)
+    }
+})
+{% include 'base/chart_functions.html' %}
+{% endblock %}
+</script>
+
+{% block content %}
+ 
+<form method="post" novalidate>
+    {% csrf_token %}
+    {% include 'base/form.html' %}
+    <button type="submit" class="btn btn-success">Post</button>
+</form>
+
+<div class='row'>
+    <div class='col-sm-11' url-endpoint='{% url "api-data" %}'>
+        <canvas id="myChart" width="200" height="70"></canvas>
+    </div>
+</div>
+
+{% endblock content %}

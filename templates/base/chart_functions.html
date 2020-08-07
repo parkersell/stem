@@ -1,8 +1,17 @@
 //<script> //to trick visual studio to giving me better formatting
 
+function finaldate(firsttime){
+    var date = new Date(firsttime);
+    var day = date.getDate(); 
+    var month = date.getMonth()+1;
+    var year = date.getFullYear();
+    return month +'/'+day +'/' +year
+}
 function singleChart(time, label, hr){
     var ctx = document.getElementById("myChart");
     //var ctx2 = document.getElementById("myChart2");
+    
+    var finaldatestr = finaldate(time[0]);
     var myChart = new Chart(ctx, {
     type: 'line',
     data: {
@@ -17,6 +26,12 @@ function singleChart(time, label, hr){
     options: {
         scales: {
             xAxes: [{
+                display: true,
+				scaleLabel: {
+					display: true,
+					labelString: finaldatestr,
+					},
+
                 type: 'time',
                 time: {
                     unit: 'minute',
@@ -28,6 +43,11 @@ function singleChart(time, label, hr){
                 }
             }],
             yAxes: [{
+                display: true,
+				scaleLabel: {
+					display: true,
+					labelString: "Heart Rate"
+					},
                 id: label,
                 type: 'linear',
                 ticks: {
@@ -66,33 +86,73 @@ function singleChart(time, label, hr){
     }
 }); */
 }
-
-function multiChart(basetime, time1, label1, hr1, time2, label2, hr2){
+function newDate(minutes, time) {
+    var timejs = moment(new Date(time));
+    var day =timejs.format('l');
+	var time =timejs.add(minutes, 'm').format('LT');
+    return day +', '+time
+}
+function makeData(time, hr){ 
+    var data =[];
+    for (i =0; i<time.length;i++){
+        var dict = {x: time[i], y: hr[i]}
+        data.push(dict)
+    }
+    return data
+}
+function minusDay(time){
+    //just a test
+    var timejs = moment(new Date(time));
+    var day = timejs.subtract(1,"d").format('l');
+    var time = timejs.format('LT');
+    return day + ', ' + time
+}
+function multiChart(time1, label1, hr1, time2, label2, hr2){
     var ctx = document.getElementById("myChart").getContext('2d');
     //var ctx2 = document.getElementById("myChart2");
+    var basetime =[];
+    for (i=0; i<=time1.length; i++ ){
+        basetime.push(newDate(i, time1[0]));
+    }
+    var minusdaytime2 =[];
+    for (i=0; i<time2.length; i++ ){
+        minusdaytime2.push(minusDay(time2[i]));
+    }
+    console.log(time1);
+    console.log(minusdaytime2);
+    var time1data = makeData(time1, hr1);
+    var time2data = makeData(minusdaytime2, hr2)
+    var finaldatestr = finaldate(time1[0]);
+    // console.log(basetime);
+    // console.log("UP =Basetime, DOWN =stud1time")
+    // console.log(stud1time);
     var myChart = new Chart(ctx, {
     type: 'line',
     data: {
         labels: basetime,
         datasets: [{
             label: label1,
-            yAxisID: label1,
-            data: hr1,
+            backgroundColor: "rgba(43, 206, 211, 0.48)",
+            data: time1data,
             borderWidth: 1
         }, {
             label: label2,
-            yAxisID: label2,
-            data: hr2,
+            backgroundColor: "rgba(211, 48, 43, 0.48)",
+            data: time2data,
             borderWidth: 1
         }]
     },
     options: {
         scales: {
             xAxes: [{
+                display: true,
+				scaleLabel: {
+					display: true,
+					labelString: finaldatestr
+					},
                 type: 'time',
                 time: {
                     unit: 'minute',
-                    
                 },
                 ticks: {
                     autoSkip: true,
@@ -100,6 +160,11 @@ function multiChart(basetime, time1, label1, hr1, time2, label2, hr2){
                 }
             }],
             yAxes: [{
+                display: true,
+				scaleLabel: {
+					display: true,
+					labelString: 'Heart Rate'
+					},
                 id: labels1,
                 type: 'linear',
                 ticks: {

@@ -24,28 +24,57 @@ class SyncUpload(forms.Form):
     str_student= forms.CharField(
         label='Student', 
         help_text='Which student would you like to sync data for?',
-        widget=forms.Textarea(
-            attrs={'rows': 1}
-        ), 
+        widget=forms.TextInput(), 
         max_length=30
     )
     sync_date = forms.CharField(
+        label='Sync date',
         help_text='Choices are today, yesterday, or %Y-%m-%d', 
-        widget=forms.Textarea(
-           attrs={'rows': 1, 'cols': 10} 
-        ),
+        widget=forms.TextInput(),
         max_length=30
     )
     class Meta:
         model =Syncing
         fields =['student_name', 'recent_synctime','str_student', 'sync_date']
 
-class ChartSelect(forms.Form):
+class SingleChartSelect(forms.Form):
     str_student= forms.CharField(
         label='Student', 
         help_text='Which student would you like to see data for?',
-        widget=forms.Textarea(
-            attrs={'rows': 1, 'cols': 10}
-        ), 
+        widget=forms.TextInput(), 
+        max_length=30
+    )
+    start_time=forms.CharField(
+        label='Start time',
+        widget=forms.TextInput(),
+        max_length=30
+    )
+    end_time=forms.CharField(
+        label='End time',
+        widget=forms.TextInput(),
+        max_length=30
+    )
+
+class MultiChartSelect(forms.Form):
+    student_one= forms.CharField( 
+        label='Student', 
+        help_text='Which student would you like to see data for?',
+        widget=forms.TextInput(),
+        max_length=30
+    )
+    student_two= forms.CharField(
+        label='Student', 
+        help_text='Which other student would you like to see data for?',
+        widget=forms.TextInput(),
+        max_length=30
+    )
+    start_time=forms.CharField(
+        label='Start time',
+        widget=forms.TextInput(),
+        max_length=30
+    )
+    end_time=forms.CharField(
+        label='End time',
+        widget=forms.TextInput(),
         max_length=30
     )

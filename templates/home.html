@@ -11,12 +11,14 @@
     <p>Click here to be directed to the dashboard describing the most recently synced data</p>
   <h1><a href="{% url 'day' %}">Today's Data</a></h1>
     <p>Click here to be directed to the dashboard describing the entire day's data</p>
-  <h1><a href="{% url 'chartselect' %}">Chart</a></h1>
-    <p>Click here to be directed a chart</p>
+  <h1><a href="{% url 'singlechartselect' %}">Single Student Chart</a></h1>
+    <p>Click here to be directed a chart of one student's data</p>
+  <h1><a href="{% url 'multichart' %}">Multi Student Chart</a></h1>
+    <p>Click here to be directed a chart of multiple student's data</p>
   <h1><a href="{% url 'syncpage' %}">Sync Data</a></h1>
-  <p>Click here to sync data</p></h1>
+    <p>Click here to sync data</p></h1>
   <h1><a href="{% url 'api-data' %}">Chart Data</a></h1>
-  <p>Click here to view jsondata</p></h1>
+    <p>Click here to view jsondata</p></h1>
   
     
 {%endblock%}

@@ -16,16 +16,16 @@ $.ajax({
     method: "GET",
     url: endpoint,
     success: function(data){
-        var studentNum = {{ student }}
-        labels1 = data.labels[studentNum]
-        labels2 = data.labels[3]
+        var studentNum1 = {{ student_one }}
+        var studentNum2 = {{ student_two }}
+        labels1 = data.labels[studentNum1]
+        labels2 = data.labels[studentNum2]
         stud1time = Object.keys(data[labels1])
         stud1hr = Object.values(data[labels1]).map(n => n.toString())
         stud2time = Object.keys(data[labels2])
         stud2hr = Object.values(data[labels2]).map(n => n.toString())
-        singleChart(stud1time, labels1, stud1hr)  
-        //multiChart(stud1time, stud1time, labels1, stud1hr, stud1time, labels1, stud1hr)
-        //console.log()
+        // singleChart(stud1time, labels1, stud1hr)
+        multiChart(stud1time, labels1, stud1hr, stud2time, labels2, stud2hr)     
     },
     error: function(error_data){
         console.log("error")
@@ -38,16 +38,16 @@ $.ajax({
 
 {% block content %}
 
-<form method="post" novalidate>
+<form method="post" novalidate autocomplete="off">
     {% csrf_token %}
     {% include 'base/form.html' %}
     <button type="submit" class="btn btn-success">Post</button>
 </form>
 
 <div class='row'>
-    <div class='col-sm-12' url-endpoint='{% url "api-data" %}'>
+    <div class='col-sm-11' url-endpoint='{% url "api-data" %}'>
         
-            <canvas id="myChart" width="400" height="200"></canvas>
+            <canvas id="myChart" width="200" height="70"></canvas>
         <!-- 
         <div class='col-sm-6'>
             <canvas id="myChart2" width="400" height="400"></canvas>
@@ -55,6 +55,18 @@ $.ajax({
     </div>
 </div>
 
-
-
 {% endblock content %}
+
+{% block javascript %}
+//<script>
+$("#id_start_time").datetimepicker({
+  timepicker: true, 
+  datepicker: true, 
+  
+});
+$("#id_end_time").datetimepicker({
+  timepicker: true, 
+  datepicker: true
+});
+
+{% endblock %}
