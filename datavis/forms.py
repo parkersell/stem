@@ -38,9 +38,9 @@ class SyncUpload(forms.Form):
         fields =['student_name', 'recent_synctime','str_student', 'sync_date']
 
 class SingleChartSelect(forms.Form):
-    str_student= forms.CharField(
+    student_str= forms.CharField(
         label='Student', 
-        help_text='Which student would you like to see data for?',
+        # help_text='Which student would you like to see data for?',
         widget=forms.TextInput(), 
         max_length=30
     )
@@ -58,13 +58,13 @@ class SingleChartSelect(forms.Form):
 class MultiChartSelect(forms.Form):
     student_one= forms.CharField( 
         label='Student', 
-        help_text='Which student would you like to see data for?',
+        # help_text='Which student would you like to see data for?',
         widget=forms.TextInput(),
         max_length=30
     )
     student_two= forms.CharField(
         label='Student', 
-        help_text='Which other student would you like to see data for?',
+        # help_text='Which other student would you like to see data for?',
         widget=forms.TextInput(),
         max_length=30
     )

@@ -1,13 +1,11 @@
 {% extends 'base.html' %}
-
+{% load rest_framework %}
 
 <script>
 {% block jquery %}
-var endpoint = '/api/chart/data/'
 var stud1time = []
 var stud1hr = []
-var labels1 = '';
-
+{% include 'base/endpointurl.html' %}
 
 $.ajax({
     method: "GET",
@@ -30,7 +28,7 @@ $.ajax({
 
 {% block content %}
  
-<form method="post" novalidate>
+<form class="form-inline" method="post" novalidate autocomplete="off">
     {% csrf_token %}
     {% include 'base/form.html' %}
     <button type="submit" class="btn btn-success">Post</button>
@@ -43,3 +41,17 @@ $.ajax({
 </div>
 
 {% endblock content %}
+
+{% block javascript %}
+//<script>
+$("#id_start_time").datetimepicker({
+  timepicker: true, 
+  datepicker: true, 
+  
+});
+$("#id_end_time").datetimepicker({
+  timepicker: true, 
+  datepicker: true
+});
+
+{% endblock %}

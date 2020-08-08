@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-
+from django.shortcuts import get_object_or_404, get_list_or_404
 import fitbit
 from fitbit import gather_keys_oauth2 as Oauth2
 import pandas as pd 
@@ -18,9 +18,10 @@ class Student(models.Model):
     def returnObject(str):
         try:
             stud = Student.objects.get(student_name=str)
-        except Chart.DoesNotExist:
-            stud = 'DNE'
-        return stud
+            dne = ''
+        except Student.DoesNotExist:
+            dne = 'DNE'
+        return stud, dne
 
 
 
@@ -33,11 +34,13 @@ class Chart(models.Model):
     def __str__(self):
         return str(self.time)
 
-    def getonestudent(student, periodoftime): # returns a dictionary of last hour heart rate for specified student and period of time - hour, all
+    def getonestudent(student, periodoftime, start_time=None, end_time=None): # returns a dictionary of last hour heart rate for specified student and period of time - hour, all
         studentobject = Student.objects.get(student_name=student)
         timetemp = Chart.objects.filter(student_name=studentobject).values_list('time', flat=True).order_by('-time')
         min_hrtemp = Chart.objects.filter(student_name=studentobject).values_list('min_hr', flat=True).order_by('-time')
-   
+        if start_time is not None and end_time is not None:
+            timetemp= Chart.objects.filter(student_name=studentobject).filter(time__range=[start_time, end_time]).values_list('time', flat=True).order_by('-time')
+            min_hrtemp = Chart.objects.filter(student_name=studentobject).filter(time__range=[start_time, end_time]).values_list('min_hr', flat=True).order_by('-time')
         if (str(periodoftime)== "hour"):
            timetemp = timetemp[:60]
            min_hrtemp = min_hrtemp[:60] 
@@ -53,7 +56,7 @@ class Chart(models.Model):
         return dict(zipObj)
 
 
-    def getallstudents(periodoftime):
+    def getallstudents(periodoftime, start_time=None, end_time=None):
         data ={} #held to hold the dictionary on line 41
         labels =[]
         
@@ -61,7 +64,7 @@ class Chart(models.Model):
         numberofstudents = len(students)
         for student in students:
             labels.append(student.student_name)
-            d = Chart.getonestudent(student.student_name, periodoftime)
+            d = Chart.getonestudent(student.student_name, periodoftime, start_time, end_time)
             data.update({student.student_name: d}) # line 41 
         
         temp = {}
@@ -73,18 +76,21 @@ class Chart(models.Model):
         return temp
 
     @staticmethod
-    def returnTime(str, studentobj):
+    def jqueryToDatetime(str):
+        return datetime.datetime.strptime(str,'%Y/%m/%d %H:%M')
+
+    @staticmethod
+    def checkTime(str):
         try:
-            time = datetime.datetime.strptime(str,'%Y/%m/%d %H:%M')# this could get bad since %#I only works on Windows not Linux
-            if studentobj == 'none': #allows for filtering time by student
-                time = Chart.objects.get(time=time)
-            else:
-                time = Chart.objects.filter(student_name=studentobj).get(time=time)
+            datetime = Chart.jqueryToDatetime(str)# this could get bad since %#I only works on Windows not Linux
+            chartobjectlist = list(Chart.objects.filter(time=datetime))
+            chartobject = chartobjectlist[0] # used to send only one of the dates not both
+            dne=''
         except Chart.DoesNotExist:
-            time = 'DNE'
-        return time
+            dne = 'DNE'
+        return dne
         
-    #TODO create an overloaded function or a second function that queries using a time range since the query used above is too specific to taking the most recent 60 points
+    
 
 
 class Syncing(models.Model):

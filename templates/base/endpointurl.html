@@ -1,0 +1,14 @@
+//<script>
+var endpoint ='/api/chart/data/'
+
+var start_time = "{{ start_time }}"
+var end_time = "{{ end_time }}"
+var type = "{{ datatype }}"
+var start_timeurl = "start_time="
+var end_timeurl ="end_time="
+var typeurl ="datatype="
+start_time = encodeURIComponent(start_time)
+end_time = encodeURIComponent(end_time)
+type = encodeURIComponent(type)
+endpoint = endpoint.concat('?', start_timeurl, start_time, '&', end_timeurl, end_time, '&', typeurl, type)
+// console.log(endpoint)

@@ -1,9 +1,13 @@
 {% extends 'base.html' %}
-
+{% load rest_framework %}
 
 <script>
 {% block jquery %}
-var endpoint = '/api/chart/data/'
+
+
+{% include 'base/endpointurl.html' %}
+var studentNum1 = {{ student_one }}
+var studentNum2 = {{ student_two }}
 var stud1time = []
 var stud2time = []
 var stud1hr = []
@@ -16,15 +20,12 @@ $.ajax({
     method: "GET",
     url: endpoint,
     success: function(data){
-        var studentNum1 = {{ student_one }}
-        var studentNum2 = {{ student_two }}
         labels1 = data.labels[studentNum1]
         labels2 = data.labels[studentNum2]
         stud1time = Object.keys(data[labels1])
         stud1hr = Object.values(data[labels1]).map(n => n.toString())
         stud2time = Object.keys(data[labels2])
         stud2hr = Object.values(data[labels2]).map(n => n.toString())
-        // singleChart(stud1time, labels1, stud1hr)
         multiChart(stud1time, labels1, stud1hr, stud2time, labels2, stud2hr)     
     },
     error: function(error_data){
@@ -38,7 +39,7 @@ $.ajax({
 
 {% block content %}
 
-<form method="post" novalidate autocomplete="off">
+<form class="form-inline" method="post" novalidate autocomplete="off">
     {% csrf_token %}
     {% include 'base/form.html' %}
     <button type="submit" class="btn btn-success">Post</button>
