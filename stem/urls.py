@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from datavis.views import DataView, SingleChartView, ChartData, MultiChartView
+from datavis.views import DataView, SingleChartView, ChartData, MultiChartView, SyncSuccess
 from datavis import views as dv
 from analysis import views as av
 
@@ -29,7 +29,7 @@ urlpatterns = [
     path('multichart/', MultiChartView.as_view(), name='multichart'),
     path('api/chart/data/', ChartData.as_view(), name='api-data'),
     path('sync/', dv.syncpage, name ='syncpage'),
-    path('sync/success', dv.syncsuccess, name ='syncsuccess'),
+    path('sync/success/<str:name>/', SyncSuccess.as_view(), name ='syncsuccess'),
     path('404', dv.v404, name ='four')
 
 

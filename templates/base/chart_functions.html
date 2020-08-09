@@ -111,17 +111,17 @@ function multiChart(time1, label1, hr1, time2, label2, hr2){
     var ctx = document.getElementById("myChart").getContext('2d');
     //var ctx2 = document.getElementById("myChart2");
     var basetime =[];
-    for (i=0; i<=time1.length; i++ ){
+    for (i=0; i<time1.length; i++ ){
         basetime.push(newDate(i, time1[0]));
     }
-    var minusdaytime2 =[];
-    for (i=0; i<time2.length; i++ ){
-        minusdaytime2.push(minusDay(time2[i]));
-    }
-    // console.log(time1);
-    // console.log(minusdaytime2);
+    // var minusdaytime2 =[];
+    // for (i=0; i<time2.length; i++ ){
+    //     minusdaytime2.push(minusDay(time2[i]));
+    // }
+    console.log(time1);
+    console.log(time2);
     var time1data = makeData(time1, hr1);
-    var time2data = makeData(minusdaytime2, hr2)
+    var time2data = makeData(time2, hr2)
     var finaldatestr = finaldate(time1[0]);
     // console.log(basetime);
     // console.log("UP =Basetime, DOWN =stud1time")

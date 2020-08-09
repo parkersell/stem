@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{%block breadcrumb %}
+<li class="breadcrumb-item">ChartSelect</li>
+{%endblock%}
+
+{% block content %}
+<form method="post" novalidate autocomplete="off">
+  {% csrf_token %}
+  {% include 'base/form.html' %}
+  <button type="submit" class="btn btn-success">Post</button>
+</form>
+{% endblock %}
+
+{% block javascript %}
+//<script>
+$("#id_start_time").datetimepicker({
+  timepicker: true, 
+  datepicker: true, 
+  
+});
+$("#id_end_time").datetimepicker({
+  timepicker: true, 
+  datepicker: true
+});
+
+{% endblock %}

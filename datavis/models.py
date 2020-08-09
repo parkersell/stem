@@ -103,9 +103,15 @@ class Syncing(models.Model):
 
     def syncFitbitData(day, student):
         
+
         def convert_date(str, day):
             str = day+" "+str 
             data = datetime.datetime.strptime(str, '%Y-%m-%d %H:%M:%S')
+            return data
+        
+        def convert_date_minushour(str, day):
+            str = day+" "+str 
+            data = datetime.datetime.strptime(str, '%Y-%m-%d %H:%M:%S') - datetime.timedelta(hours=1)
             return data
 
         studentobject = Student.objects.get(student_name=student)
@@ -130,6 +136,7 @@ class Syncing(models.Model):
         time2_list = [] #not used 
         hr_list = []
         step_list =[]
+        
         for i in fit_statsHR['activities-heart-intraday']['dataset']:
             hr_list.append(i['value'])
             time_list.append(i['time'])
@@ -137,20 +144,35 @@ class Syncing(models.Model):
         for i in fit_statsStep['activities-steps-intraday']['dataset']:
             step_list.append(i['value'])
             time2_list.append(i['time'])
-        #t= time_list[-1]
+        
         # TODO make sure that there is things in timelist before creating object, since if not wearing watch then no time_list
-        Syncing.objects.create(student_name=studentobject,recent_synctime=convert_date(time_list[-1], day), sync_date=day)
-
-        for i in range(len(time_list)): 
-            try: #check to see if it already exists
-                Chart.objects.get(student_name=studentobject,time=convert_date(time_list[i], day))
-            except Chart.DoesNotExist: #if it pulls DNE then create it
-                Chart.objects.create(student_name=studentobject,time=convert_date(time_list[i], day),min_hr=hr_list[i])
-        for i in range(len(time2_list)):
-            try:
-                c = Chart.objects.get(student_name=studentobject, time=convert_date(time2_list[i], day))
-                c.min_steps = step_list[i]
-                c.save()
-            except Chart.DoesNotExist:
-                pass
+        
+        if student == "Pminus":
+            Syncing.objects.create(student_name=studentobject,recent_synctime=convert_date_minushour(time_list[-1], day), sync_date=day)
+            for i in range(len(time_list)): 
+                try: #check to see if it already exists
+                    Chart.objects.get(student_name=studentobject,time=convert_date_minushour(time_list[i], day))
+                except Chart.DoesNotExist: #if it pulls DNE then create it
+                    Chart.objects.create(student_name=studentobject,time=convert_date_minushour(time_list[i], day),min_hr=hr_list[i])
+            for i in range(len(time2_list)):
+                try:
+                    c = Chart.objects.get(student_name=studentobject, time=convert_date_minushour(time2_list[i], day))
+                    c.min_steps = step_list[i]
+                    c.save()
+                except Chart.DoesNotExist:
+                    pass
+        else:
+            Syncing.objects.create(student_name=studentobject,recent_synctime=convert_date(time_list[-1], day), sync_date=day)
+            for i in range(len(time_list)): 
+                try: #check to see if it already exists
+                    Chart.objects.get(student_name=studentobject,time=convert_date(time_list[i], day))
+                except Chart.DoesNotExist: #if it pulls DNE then create it
+                    Chart.objects.create(student_name=studentobject,time=convert_date(time_list[i], day),min_hr=hr_list[i])
+            for i in range(len(time2_list)):
+                try:
+                    c = Chart.objects.get(student_name=studentobject, time=convert_date(time2_list[i], day))
+                    c.min_steps = step_list[i]
+                    c.save()
+                except Chart.DoesNotExist:
+                    pass
 

@@ -63,7 +63,7 @@ class SingleChartView(View):
 
 class MultiChartView(View): #TODO I need to create a new rest api endpoint and model function to access specific time data
     form_class = MultiChartSelect
-    initial ={"student_one": "Parker", "student_two": "Test", "start_time": "DefaultHour", "end_time": "DefaultHour"}#learn to skip chartselect and just use a default that was saved
+    initial ={"student_one": "Parker", "student_two": "Pminus", "start_time": "DefaultHour", "end_time": "DefaultHour"}#learn to skip chartselect and just use a default that was saved
     template = 'multi_chart.html'
     
     def get(self, request, *args, **kwargs):
@@ -141,14 +141,22 @@ def syncpage(request):
     if request.method == 'POST':
         form = SyncUpload(request.POST)
         if form.is_valid():
-            Syncing.syncFitbitData(form.cleaned_data.get('sync_date'), form.cleaned_data.get('str_student'))
-            return redirect('syncsuccess') 
+            stud = form.cleaned_data.get('str_student')
+            Syncing.syncFitbitData(form.cleaned_data.get('sync_date'), stud)
+            return redirect('syncsuccess', name = stud) 
     else:
         form = SyncUpload()
     return render(request, 'syncpage.html', {'form': form})
-
-def syncsuccess(request):
-    return render(request, 'syncsuccess.html')
+class SyncSuccess(View):
+    
+    def get(self, request, *args, **kwargs):
+        name = self.kwargs['name']
+        studentobj, dne = Student.returnObject(name)
+        if 'DNE' in dne:
+            raise Http404("Student does not exist") 
+        synctime = Syncing.objects.filter(student_name=studentobj).latest('recent_synctime')
+        synctime = synctime.recent_synctime
+        return render(request, 'syncsuccess.html', {'synctime': synctime, 'name': name})
 
 def singlechartselect(request):
     if request.method == 'POST':
