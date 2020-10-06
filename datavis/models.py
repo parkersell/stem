@@ -115,8 +115,8 @@ class Syncing(models.Model):
             return data
 
         studentobject = Student.objects.get(student_name=student)
-        CLIENT_ID = '22BN3W'
-        CLIENT_SECRET = 'c06b1ffc7da46f07517230dd15dc2fe4'
+        CLIENT_ID = 'Hidden'
+        CLIENT_SECRET = 'Hidden'
 
         server = Oauth2.OAuth2Server(CLIENT_ID, CLIENT_SECRET)
         server.browser_authorize()
