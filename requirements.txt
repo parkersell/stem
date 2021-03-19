@@ -12,7 +12,7 @@ Django==3.0.4
 django-filter==2.3.0
 django-fitbit==0.3.0
 django-widget-tweaks==1.4.8
-djangorestframework==3.11.0
+djangorestframework==3.11.2
 fitbit==0.3.1
 future==0.18.2
 idna==2.9
